@@ -32,15 +32,15 @@ const insertPuraisu = async (user, type, content, location, info) => {
 
 const onMessage = async (data) => {
     await initPromise;
-    let userName = userMap[data.user].name;
-    if (!userName) {
-        await getUsers().then(res => userMap = res);
-        userName = userMap[data.user].name;
-        if (!userName) {
-            throw new Error(`Unknown user: ${data.user}`);
-        }
-    }
     if (data.type === "message" && data.channel === channelId) {
+        let userName = userMap[data.user].name;
+        if (!userName) {
+            await getUsers().then(res => userMap = res);
+            userName = userMap[data.user].name;
+            if (!userName) {
+                throw new Error(`Unknown user: ${data.user}`);
+            }
+        }
         data.text.split(/\n/)
             .filter(l => !l.startsWith("--") && !l.startsWith("—")) // ios-kommenttimerkki, vittu, Steve!!
             .map(l => l.match(puraisuRE))
