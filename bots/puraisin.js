@@ -1,4 +1,4 @@
-const { getUsers, getChannels } = require("../utils");
+const { getUsers, getChannels } = require("../lib/utils");
 const { Pool } = require("pg");
 const puraisuRE = /^(.*?);(.*?);([^;]*)(?:;(.+))?/;
 
@@ -13,7 +13,6 @@ let channelId;
 
 let initPromise;
 const init = () => {
-    console.log("Initializing puraisin...");
     initPromise = Promise.all([
         getUsers().then(res => userMap = res),
         getChannels().then(res => Object.entries(res)

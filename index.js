@@ -1,7 +1,8 @@
-const RtmListener = require("./rtm");
+const RtmListener = require("./lib/rtm");
 
 const bots = [
-    require("./bots/puraisin")
+    require("./bots/puraisin"),
+    require("./bots/vaykka")
 ];
 
 const handleMessage = (data, rtm) => {
@@ -21,5 +22,8 @@ const handleMessage = (data, rtm) => {
 };
 
 new RtmListener(rtm => {
-    bots.forEach(b => b.init && b.init(rtm))
+    bots.forEach(b => {
+        console.log(`Initializing bot ${b.name}`);
+        b.init && b.init(rtm)
+    })
 }, handleMessage);
