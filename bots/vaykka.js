@@ -1,7 +1,7 @@
 const UtteranceGenerator = require("../lib/utterances");
 const { postMessage } = require("../lib/utils");
 
-const utterances = UtteranceGenerator.fromFile("bots/vaykka.json");
+const utterances = UtteranceGenerator(require("./vaykka.json"));
 const triggers = ["vaykka", "väykkä", "väyrynen", "paavo", "väykä"];
 
 module.exports = {
@@ -12,7 +12,7 @@ module.exports = {
             if (triggers.some(t => text.indexOf(t) >= 0)) {
                 postMessage({
                     channel: data.channel,
-                    text: utterances.next().value,
+                    text: utterances.next(),
                     as_user: false,
                     icon_emoji: ":vaykka:",
                     username: "Väykkä"
