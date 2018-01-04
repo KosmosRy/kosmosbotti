@@ -2,7 +2,7 @@ const UtteranceGenerator = require("../lib/utterances");
 const { postMessage } = require("../lib/utils");
 
 const utterances = UtteranceGenerator(require("./vaykka.json"));
-const triggers = ["vaykka", "väykkä", "väyrynen", "paavo", "väykä"];
+const triggers = ["vaykka", "väykkä", "väyry", "paavo", "väykä"];
 
 module.exports = {
     name: "Väykkä",
