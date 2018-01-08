@@ -18,7 +18,7 @@ const init = () => {
         getChannels().then(res => Object.entries(res)
             .filter(([id, o]) => o.name === channelName)
             .forEach(([id]) => channelId = id))
-    ]).then(() => console.log("Initializing puraisin done"));
+    ]).then(() => console.log(`Initializing ${name} done`));
 };
 
 const insertPuraisu = async (user, type, content, location, info) => {
