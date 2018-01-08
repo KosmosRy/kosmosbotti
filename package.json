@@ -5,6 +5,7 @@
   "license": "MIT",
   "dependencies": {
     "isomorphic-fetch": "^2.2.1",
+    "log-timestamp": "^0.1.2",
     "pg": "^7.4.0",
     "ws": "^3.3.3"
   }
