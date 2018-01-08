@@ -7,7 +7,7 @@ const triggers = ["vaykka", "väykkä", "väyry", "paavo", "väykä"];
 module.exports = {
     name: "Väykkä",
     onMessage: async data => {
-        if (data.type === "message" && data.username !== "Väykkä") {
+        if (data.type === "message" && data.username !== "Väykkä" && data.text) {
             const text = data.text.toLowerCase();
             if (triggers.some(t => text.indexOf(t) >= 0)) {
                 postMessage({

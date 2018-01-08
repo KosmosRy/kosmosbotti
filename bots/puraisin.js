@@ -24,8 +24,8 @@ const init = () => {
 const insertPuraisu = async (user, type, content, location, info) => {
     console.log("Inserting puraisu");
     await pool.query(
-        "INSERT INTO puraisu (type, content, location, source, biter) VALUES($1, $2, $3, $4, $5)",
-        [type, content, location, info, user]
+        "INSERT INTO puraisu (type, content, location, info, source, biter) VALUES($1, $2, $3, $4, $5)",
+        [type, content, location, info, "slack", user]
     );
 };
 
@@ -45,10 +45,10 @@ const onMessage = async (data) => {
             .map(l => l.match(puraisuRE))
             .filter(l => l)
             .forEach(([_, _1, _2, _3, _4]) => {
-                const type = _1.trim();
-                const content = _2.trim();
-                const location = _3.trim();
-                const info = _4 ? _4.trim() : "";
+                const type = _1.trim().substr(0, 12);
+                const content = _2.trim().substr(0, 64);
+                const location = _3.trim().substr(0, 64);
+                const info = _4 ? _4.trim() : null;
                 if (mode === "prod") {
                     insertPuraisu(userName, type, content, location, info).catch(err => console.error(err));
                 } else {
