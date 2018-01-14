@@ -32,6 +32,11 @@ const insertPuraisu = async (user, type, content, location, info) => {
 const onMessage = async (data) => {
     await initPromise;
     if (data.type === "message" && data.channel === channelId) {
+        if (!data.user) {
+            console.log("Ei käyttäjätietoa");
+            console.log(data);
+            return;
+        }
         let userName = userMap[data.user] != null ? userMap[data.user].name : null;
         if (!userName) {
             await getUsers().then(res => userMap = res);
@@ -42,6 +47,13 @@ const onMessage = async (data) => {
         }
         data.text.split(/\n/)
             .filter(l => !l.startsWith("--") && !l.startsWith("—")) // ios-kommenttimerkki, vittu, Steve!!
+            .filter(l => {
+                const include = !l.startsWith("\u{200B}");  // puraisu logattu jo pikapuraisimessa
+                if (!include) {
+                    console.log("Pikapuraisinrapsa, ei tallenneta");
+                }
+                return include;
+            })
             .map(l => l.match(puraisuRE))
             .filter(l => l)
             .forEach(([_, _1, _2, _3, _4]) => {

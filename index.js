@@ -1,3 +1,4 @@
+require("dotenv").config();
 require("log-timestamp");
 const RtmListener = require("./lib/rtm");
 
