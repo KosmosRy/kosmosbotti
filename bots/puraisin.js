@@ -1,4 +1,4 @@
-const { getUsers, getChannels } = require("../lib/utils");
+const { getUsers, getChannels, fetchJson, jsonRequest } = require("../lib/utils");
 const { Pool } = require("pg");
 const puraisuRE = /^(.*?);(.*?);([^;]*)(?:;(.+))?/;
 
@@ -31,7 +31,7 @@ const insertPuraisu = async (user, type, content, location, info) => {
 
 const onMessage = async (data) => {
     await initPromise;
-    if (data.type === "message" && data.channel === channelId) {
+    if (data.type === "message" && !data.subtype && data.channel === channelId) {
         if (!data.user) {
             console.log("Ei käyttäjätietoa");
             console.log(data);
@@ -61,12 +61,23 @@ const onMessage = async (data) => {
                 const content = _2.trim().substr(0, 64);
                 const location = _3.trim().substr(0, 64);
                 const info = _4 ? _4.trim() : null;
-                if (mode === "prod") {
-                    insertPuraisu(userName, type, content, location, info).catch(err => console.error(err));
-                } else {
-                    console.log(`Puraisu - ${userName}: ${type} ${content} ${location} ${info}`);
-                }
-            })
+                insertPuraisu(userName, type, content, location, info)
+                    .then(() => {
+                        fetchJson(jsonRequest("chat.postEphemeral", {
+                            channel: channelId,
+                            user: data.user,
+                            text: "Puraisusi on raportoitu, kollektiivi kiittää, Pekka Puska valvoo"
+                        }));
+                    }, err => {
+                        console.log(err);
+                        return fetchJson(jsonRequest("chat.postEphemeral", {
+                            channel: channelId,
+                            user: data.user,
+                            text: `Puraisusi raportointi päätyi virheeseen. Syytä holhousyhteiskuntaa ja Päivi Räsästä. (Syy: ${err})`
+                        }))
+                    })
+                    .catch(err => console.error(err));
+            });
     }
 };
 
