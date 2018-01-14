@@ -24,7 +24,7 @@ const init = () => {
 const insertPuraisu = async (user, type, content, location, info) => {
     console.log("Inserting puraisu");
     await pool.query(
-        "INSERT INTO puraisu (type, content, location, info, source, biter) VALUES($1, $2, $3, $4, $5)",
+        "INSERT INTO puraisu (type, content, location, info, source, biter) VALUES($1, $2, $3, $4, $5, $6)",
         [type, content, location, info, "slack", user]
     );
 };
@@ -32,13 +32,13 @@ const insertPuraisu = async (user, type, content, location, info) => {
 const onMessage = async (data) => {
     await initPromise;
     if (data.type === "message" && data.channel === channelId) {
-        let userName = userMap[data.user].name;
+        let userName = userMap[data.user] != null ? userMap[data.user].name : null;
         if (!userName) {
             await getUsers().then(res => userMap = res);
-            userName = userMap[data.user].name;
-            if (!userName) {
+            if (!userMap[data.user]) {
                 throw new Error(`Unknown user: ${data.user}`);
             }
+            userName = userMap[data.user].name;
         }
         data.text.split(/\n/)
             .filter(l => !l.startsWith("--") && !l.startsWith("—")) // ios-kommenttimerkki, vittu, Steve!!
