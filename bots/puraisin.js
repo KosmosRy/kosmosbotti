@@ -38,13 +38,13 @@ const onMessage = async (data) => {
             console.log(data);
             return;
         }
-        let userName = userMap[data.user] != null ? userMap[data.user].name : null;
+        let userName = userMap[data.user] != null ? userMap[data.user].realName : null;
         if (!userName) {
             await getUsers().then(res => userMap = res);
             if (!userMap[data.user]) {
                 throw new Error(`Unknown user: ${data.user}`);
             }
-            userName = userMap[data.user].name;
+            userName = userMap[data.user].realName;
         }
         data.text.split(/\n/)
             .filter(l => !l.startsWith("--") && !l.startsWith("—")) // ios-kommenttimerkki, vittu, Steve!!
