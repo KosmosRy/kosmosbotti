@@ -21,11 +21,12 @@ const init = () => {
     ]).then(() => console.log(`Initializing ${name} done`));
 };
 
-const insertPuraisu = async (user, type, content, location, info) => {
+const insertPuraisu = async (user, type, content, location, info, pf) => {
     console.log("Inserting puraisu");
     await pool.query(
-        "INSERT INTO puraisu (type, content, location, info, source, biter) VALUES($1, $2, $3, $4, $5, $6)",
-        [type, content, location, info, "slack", user]
+        `INSERT INTO puraisu (type, content, location, info, source, biter, postfestum) 
+        VALUES($1, $2, $3, $4, $5, $6, $7)`,
+        [type, content, location, info, "slack", user, pf]
     );
 };
 
@@ -57,11 +58,13 @@ const onMessage = async (data) => {
             .map(l => l.match(puraisuRE))
             .filter(l => l)
             .forEach(([_, _1, _2, _3, _4]) => {
-                const type = _1.trim().substr(0, 12);
-                const content = _2.trim().substr(0, 64);
-                const location = _3.trim().substr(0, 64);
+                const origType = _1.trim().substr(0, 64);
+                const type = origType.replace(/((?:[- (])*(?:pf|postfestum)(?:[-) ])*)/i, "");
+                const pf = origType !== type;
+                const content = _2.trim();
+                const location = _3.trim();
                 const info = _4 ? _4.trim() : null;
-                insertPuraisu(userName, type, content, location, info)
+                insertPuraisu(userName, type, content, location, info, pf)
                     .then(() => {
                         fetchJson(jsonRequest("chat.postEphemeral", {
                             channel: channelId,
