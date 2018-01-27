@@ -1,4 +1,4 @@
-const { getUsers, getChannels, fetchJson, jsonRequest } = require("../lib/utils");
+const { getChannels, fetchJson, jsonRequest } = require("../lib/utils");
 const { Pool } = require("pg");
 const puraisuRE = /^(.*?);(.*?);([^;]*)(?:;(.+))?/;
 
@@ -8,13 +8,11 @@ const name = "Puraisin";
 const channelName = mode === "prod" ? "puraisut" : "hiekkalaatikko";
 const pool = new Pool({connectionString: process.env.PG_PURAISIN_URL});
 
-let userMap = {};
 let channelId;
 
 let initPromise;
 const init = () => {
     initPromise = Promise.all([
-        getUsers().then(res => userMap = res),
         getChannels().then(res => Object.entries(res)
             .filter(([id, o]) => o.name === channelName)
             .forEach(([id]) => channelId = id))
@@ -38,14 +36,6 @@ const onMessage = async (data) => {
             console.log(data);
             return;
         }
-        let userName = userMap[data.user] != null ? userMap[data.user].realName : null;
-        if (!userName) {
-            await getUsers().then(res => userMap = res);
-            if (!userMap[data.user]) {
-                throw new Error(`Unknown user: ${data.user}`);
-            }
-            userName = userMap[data.user].realName;
-        }
         data.text.split(/\n/)
             .filter(l => !l.startsWith("--") && !l.startsWith("—")) // ios-kommenttimerkki, vittu, Steve!!
             .filter(l => {
@@ -64,7 +54,7 @@ const onMessage = async (data) => {
                 const content = _2.trim();
                 const location = _3.trim();
                 const info = _4 ? _4.trim() : null;
-                insertPuraisu(userName, type, content, location, info, pf)
+                insertPuraisu(data.user, type, content, location, info, pf)
                     .then(() => {
                         fetchJson(jsonRequest("chat.postEphemeral", {
                             channel: channelId,
