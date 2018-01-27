@@ -1,5 +1,4 @@
-const { getUserInfo, getChannels, fetchJson, jsonRequest } = require("kosmos-utils");
-const { Pool } = require("pg");
+const { getUserInfo, getChannels, fetchJson, jsonRequest, puraisuDB } = require("kosmos-utils");
 const puraisuRE = /^(.*?);(.*?);([^;]*)(?:;(.+))?/;
 
 const token = process.env.KOSMOS_BOT_TOKEN;
@@ -7,7 +6,7 @@ const mode = process.env.PURAISIN_MODE || "prod";
 
 const name = "Puraisin";
 const channelName = mode === "prod" ? "puraisut" : "hiekkalaatikko";
-const pool = new Pool({connectionString: process.env.PG_PURAISIN_URL});
+const db = puraisuDB(process.env.PG_PURAISIN_URL, "slack");
 
 let channelId;
 
@@ -18,15 +17,6 @@ const init = () => {
             .filter(([id, o]) => o.name === channelName)
             .forEach(([id]) => channelId = id))
     ]).then(() => console.log(`Initializing ${name} done`));
-};
-
-const insertPuraisu = async (user, type, content, location, info, pf, timezone) => {
-    console.log("Inserting puraisu");
-    await pool.query(
-        `INSERT INTO puraisu (type, content, location, info, source, biter, postfestum, timezone) 
-        VALUES($1, $2, $3, $4, $5, $6, $7, $8)`,
-        [type, content, location, info, "slack", user, pf, timezone]
-    );
 };
 
 const onMessage = async (data) => {
@@ -57,7 +47,7 @@ const onMessage = async (data) => {
                 const content = _2.trim();
                 const location = _3.trim();
                 const info = _4 ? _4.trim() : null;
-                insertPuraisu(data.user, type, content, location, info, pf, timezone)
+                db.insertPuraisu(data.user, type, content, location, info, pf, null, timezone)
                     .then(() => {
                         fetchJson(jsonRequest("chat.postEphemeral", token, {
                             channel: channelId,
