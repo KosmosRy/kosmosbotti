@@ -39,6 +39,12 @@ js-string-escape@1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/js-string-escape/-/js-string-escape-1.0.1.tgz#e2625badbc0d67c7533e9edc1068c587ae4137ef"
 
+"kosmos-utils@github:KosmosRy/kosmos-utils#v1.0.2":
+  version "1.0.2"
+  resolved "https://codeload.github.com/KosmosRy/kosmos-utils/tar.gz/2fb6d3b98356dd806f68354250bea62b83c7d8bd"
+  dependencies:
+    isomorphic-fetch "^2.2.1"
+
 log-prefix@0.0.0:
   version "0.0.0"
   resolved "https://registry.yarnpkg.com/log-prefix/-/log-prefix-0.0.0.tgz#2fc61d7c0e519f8f9f86adca7d53a0a7a7571770"
@@ -48,16 +54,6 @@ log-timestamp@^0.1.2:
   resolved "https://registry.yarnpkg.com/log-timestamp/-/log-timestamp-0.1.2.tgz#ccc173925173a89faa76c426519bf1a8a17764e8"
   dependencies:
     log-prefix "0.0.0"
-
-moment-timezone@^0.5.14:
-  version "0.5.14"
-  resolved "https://registry.yarnpkg.com/moment-timezone/-/moment-timezone-0.5.14.tgz#4eb38ff9538b80108ba467a458f3ed4268ccfcb1"
-  dependencies:
-    moment ">= 2.9.0"
-
-"moment@>= 2.9.0":
-  version "2.20.1"
-  resolved "https://registry.yarnpkg.com/moment/-/moment-2.20.1.tgz#d6eb1a46cbcc14a2b2f9434112c1ff8907f313fd"
 
 node-fetch@^1.0.1:
   version "1.7.3"

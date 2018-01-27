@@ -1,6 +1,7 @@
 const UtteranceGenerator = require("../lib/utterances");
-const { postMessage } = require("../lib/utils");
+const { postMessage } = require("kosmos-utils");
 
+const token = process.env.KOSMOS_BOT_TOKEN;
 const utterances = UtteranceGenerator(require("./vaykka.json"));
 const triggers = ["vaykka", "väykkä", "väyry", "paavo", "väykä"];
 
@@ -16,7 +17,7 @@ module.exports = {
                     as_user: false,
                     icon_emoji: ":vaykka:",
                     username: "Väykkä"
-                }).catch(err => console.error(err));
+                }, token).catch(err => console.error(err));
             }
         }
     }
