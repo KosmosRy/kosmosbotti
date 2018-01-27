@@ -1,5 +1,6 @@
-const { getChannels, fetchJson, jsonRequest } = require("../lib/utils");
+const { getUserInfo, getChannels, fetchJson, jsonRequest } = require("../lib/utils");
 const { Pool } = require("pg");
+const moment = require("moment-timezone");
 const puraisuRE = /^(.*?);(.*?);([^;]*)(?:;(.+))?/;
 
 const mode = process.env.PURAISIN_MODE || "prod";
@@ -19,12 +20,12 @@ const init = () => {
     ]).then(() => console.log(`Initializing ${name} done`));
 };
 
-const insertPuraisu = async (user, type, content, location, info, pf) => {
+const insertPuraisu = async (user, type, content, location, info, pf, timestamp, timezone) => {
     console.log("Inserting puraisu");
     await pool.query(
-        `INSERT INTO puraisu (type, content, location, info, source, biter, postfestum) 
-        VALUES($1, $2, $3, $4, $5, $6, $7)`,
-        [type, content, location, info, "slack", user, pf]
+        `INSERT INTO puraisu (type, content, location, info, source, biter, postfestum, timestamp, timezone) 
+        VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9)`,
+        [type, content, location, info, "slack", user, pf, timestamp, timezone]
     );
 };
 
@@ -47,14 +48,17 @@ const onMessage = async (data) => {
             })
             .map(l => l.match(puraisuRE))
             .filter(l => l)
-            .forEach(([_, _1, _2, _3, _4]) => {
+            .forEach(async ([_, _1, _2, _3, _4]) => {
+                const userInfo = await getUserInfo(data.user);
+                const timezone = userInfo.user.tz || "Europe/Helsinki";
+                const timestamp = moment.tz(data.ts * 1000, timezone).format("YYYY-MM-DD HH:mm:ssZ");
                 const origType = _1.trim().substr(0, 64);
                 const type = origType.replace(/((?:[- (])*(?:pf|postfestum)(?:[-) ])*)/i, "");
                 const pf = origType !== type;
                 const content = _2.trim();
                 const location = _3.trim();
                 const info = _4 ? _4.trim() : null;
-                insertPuraisu(data.user, type, content, location, info, pf)
+                insertPuraisu(data.user, type, content, location, info, pf, timestamp, timezone)
                     .then(() => {
                         fetchJson(jsonRequest("chat.postEphemeral", {
                             channel: channelId,
