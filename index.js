@@ -3,7 +3,7 @@ require("log-timestamp");
 const RtmListener = require("./lib/rtm");
 
 const bots = [
-    require("./bots/puraisin"),
+    //require("./bots/puraisin"),
     require("./bots/vaykka")
 ];
 
