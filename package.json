@@ -12,9 +12,8 @@
   },
   "dependencies": {
     "@slack/bolt": "^3.9.0",
-    "dotenv": "^4.0.0",
-    "log-timestamp": "^0.1.2",
-    "ws": "^3.3.3"
+    "dotenv": "^16.0.0",
+    "log-timestamp": "^0.3.0"
   },
   "devDependencies": {
     "@tsconfig/node16": "^1.0.2",

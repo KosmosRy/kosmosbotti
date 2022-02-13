@@ -564,13 +564,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"async-limiter@npm:~1.0.0":
-  version: 1.0.1
-  resolution: "async-limiter@npm:1.0.1"
-  checksum: 2b849695b465d93ad44c116220dee29a5aeb63adac16c1088983c339b0de57d76e82533e8e364a93a9f997f28bbfc6a92948cefc120652bd07f3b59f8d75cf2b
-  languageName: node
-  linkType: hard
-
 "asynckit@npm:^0.4.0":
   version: 0.4.0
   resolution: "asynckit@npm:0.4.0"
@@ -844,10 +837,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"dotenv@npm:^4.0.0":
-  version: 4.0.0
-  resolution: "dotenv@npm:4.0.0"
-  checksum: 558b099798d73504eb354f9d71435d102744cf5e04d400dee5afc62179997abaeb3e30198cffa3a9c5c757bb3d863d6fd0ae9924c5f55c8b99326e1a7874796b
+"dotenv@npm:^16.0.0":
+  version: 16.0.0
+  resolution: "dotenv@npm:16.0.0"
+  checksum: 664cebb51f0a9a1d1b930f51f0271e72e26d62feaecc9dc03df39453dd494b4e724809ca480fb3ec3213382b1ed3f791aaeb83569a137f9329ce58efd4853dbf
   languageName: node
   linkType: hard
 
@@ -1715,14 +1708,13 @@ __metadata:
     "@types/node": ^17.0.17
     "@typescript-eslint/eslint-plugin": ^5.11.0
     "@typescript-eslint/parser": ^5.11.0
-    dotenv: ^4.0.0
+    dotenv: ^16.0.0
     eslint: ^8.9.0
     eslint-config-prettier: ^8.3.0
-    log-timestamp: ^0.1.2
+    log-timestamp: ^0.3.0
     prettier: ^2.5.1
     ts-node: ^10.5.0
     typescript: ^4.5.5
-    ws: ^3.3.3
   languageName: unknown
   linkType: soft
 
@@ -1856,19 +1848,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"log-prefix@npm:0.0.0":
-  version: 0.0.0
-  resolution: "log-prefix@npm:0.0.0"
-  checksum: 62d8d776a8d247150dd5785be62b57536e38e97f9312164516c543ddc682f81503479793884a122f17f8953f22a1d0c2056e6379e2f030e20ef009d90d19f5f4
+"log-prefix@npm:0.1.1":
+  version: 0.1.1
+  resolution: "log-prefix@npm:0.1.1"
+  checksum: cd2fdbcd31520940b1294fde005322243c5d825882c82f9a734b3b81d94cd2c9b3cf063dfa62108db11b869c58bfa636b3ac4cd508f341dc203a8527251851f2
   languageName: node
   linkType: hard
 
-"log-timestamp@npm:^0.1.2":
-  version: 0.1.2
-  resolution: "log-timestamp@npm:0.1.2"
+"log-timestamp@npm:^0.3.0":
+  version: 0.3.0
+  resolution: "log-timestamp@npm:0.3.0"
   dependencies:
-    log-prefix: 0.0.0
-  checksum: 3b0e03e4c3731a22a3bcf379f3b88ee970a25d2215137573dd48fd6865f36a72c392c21093c3d9454d18a1dbf630550b5433af40f601d96189594fc98359e820
+    log-prefix: 0.1.1
+  checksum: f685491d90d0958629a246e6003910f64a1b7e25273077376b4206c439a13cd32a047c8cc9da5b89c46c5a0320b689680dcc85cc87de849eb941d57cc66e429b
   languageName: node
   linkType: hard
 
@@ -2298,13 +2290,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"safe-buffer@npm:~5.1.0":
-  version: 5.1.2
-  resolution: "safe-buffer@npm:5.1.2"
-  checksum: f2f1f7943ca44a594893a852894055cf619c1fbcb611237fc39e461ae751187e7baf4dc391a72125e0ac4fb2d8c5c0b3c71529622e6a58f46b960211e704903c
-  languageName: node
-  linkType: hard
-
 "safer-buffer@npm:>= 2.1.2 < 3":
   version: 2.1.2
   resolution: "safer-buffer@npm:2.1.2"
@@ -2596,13 +2581,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ultron@npm:~1.1.0":
-  version: 1.1.1
-  resolution: "ultron@npm:1.1.1"
-  checksum: aa7b5ebb1b6e33287b9d873c6756c4b7aa6d1b23d7162ff25b0c0ce5c3c7e26e2ab141a5dc6e96c10ac4d00a372e682ce298d784f06ffcd520936590b4bc0653
-  languageName: node
-  linkType: hard
-
 "unbox-primitive@npm:^1.0.1":
   version: 1.0.1
   resolution: "unbox-primitive@npm:1.0.1"
@@ -2694,17 +2672,6 @@ __metadata:
   version: 1.0.2
   resolution: "wrappy@npm:1.0.2"
   checksum: 159da4805f7e84a3d003d8841557196034155008f817172d4e986bd591f74aa82aa7db55929a54222309e01079a65a92a9e6414da5a6aa4b01ee44a511ac3ee5
-  languageName: node
-  linkType: hard
-
-"ws@npm:^3.3.3":
-  version: 3.3.3
-  resolution: "ws@npm:3.3.3"
-  dependencies:
-    async-limiter: ~1.0.0
-    safe-buffer: ~5.1.0
-    ultron: ~1.1.0
-  checksum: 20b7bf34bb88715b9e2d435b76088d770e063641e7ee697b07543815fabdb752335261c507a973955e823229d0af8549f39cc669825e5c8404aa0422615c81d9
   languageName: node
   linkType: hard
 
