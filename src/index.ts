@@ -1,44 +1,45 @@
-import { App } from '@slack/bolt'
+import { App, AppOptions } from '@slack/bolt'
+import bots from './bots'
 
-const app = new App({
+const config: AppOptions = {
   token: process.env.SLACK_BOT_TOKEN,
   signingSecret: process.env.SLACK_SIGNING_SECRET,
   socketMode: true,
   appToken: process.env.SLACK_APP_TOKEN
-})
+}
 
-app.message('hello', async ({ message, say }) => {
-  if ('user' in message) {
-    await say({
-      blocks: [
-        {
-          type: 'section',
-          text: {
-            type: 'mrkdwn',
-            text: `Hey there <@${message.user}>!`
-          },
-          accessory: {
-            type: 'button',
-            text: {
-              type: 'plain_text',
-              text: 'Click Me'
-            },
-            action_id: 'button_click'
-          }
-        }
-      ],
-      text: `Hey there <@${message.user}>!`
-    })
-  }
-})
+const cliOpt = { token: config.token }
 
-app.action('button_click', async ({ body, ack, say }) => {
-  await ack()
-  await say(`<@${body.user.id}> clicked the button`)
+const app = new App(config)
+
+const joinChannel = (channelId: string) => {
+  console.log('Joining channel', channelId)
+  return app.client.conversations.join({
+    ...cliOpt,
+    channel: channelId
+  })
+}
+
+bots.forEach(bot => bot(app))
+
+app.event('channel_created', async ({ event }) => {
+  await joinChannel(event.channel.id)
 })
 ;(async () => {
   // Start your app
   await app.start(process.env.PORT || 3000)
 
   console.log('⚡️ Bolt app is running!')
+
+  const channels = await app.client.users
+    .conversations(cliOpt)
+    .then(({ channels }) => channels?.map(({ id }) => id ?? '') ?? [])
+
+  const allChannels = await app.client.conversations
+    .list(cliOpt)
+    .then(({ channels }) => channels?.map(({ id }) => id ?? '') ?? [])
+
+  const joins = allChannels.filter(c => !channels.includes(c)).map(joinChannel)
+
+  await Promise.allSettled(joins)
 })()

@@ -4,6 +4,7 @@
     "transpileOnly": true
   },
   "compilerOptions": {
-    "noEmit": true
+    "noEmit": true,
+    "resolveJsonModule": true
   }
 }
