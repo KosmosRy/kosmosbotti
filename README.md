@@ -2,28 +2,15 @@ Kosmosbotti
 ===========
 
 Kosmosbotti on yleinen Slack-botti, joka pitää huolen yhteydestä 
-Slackiin ja ohjaa sieltä tulevat viestit määritellyille "aliboteille". Kosmosbotti käyttää
-Slackin Real Time Messaging API:a (RTM) viestien kuunteluun ja tarjoaa tämän kanavan myös aliboteille, 
-jotka kuitenkin voivat halutessaan olla yhteydessä Slackiin muillakin tavoilla. Kosmosbotti välittää 
-kaikki vastaanottamansa viestit kaikilta kanavilta, jonne botti on lisätty.
+Slackiin ja ohjaa sieltä tulevat viestit määritellyille "aliboteille". Kosmosbotti on 
+rakennettu Slackin [Bolt SDK:n](https://api.slack.com/tools/bolt) avulla.
 
 Alibotit
 --------
 
-Alibotit voivat olla mitä tahansa javascript-objekteja, joilla on seuraavat ominaisuudet:
+Alibotit voivat olla mitä tahansa javascript-funktioita, jotka toteuttavat 
+[BotRegistration](./src/bots/index.ts) rajapinnan. Alibotti otetaan käyttöön lisäämällä 
+ylläoleva funktio [bots](./src/bots/index.ts)-taulukkoon.
 
-```
-name: string
-init?: (rtm: RtmListener) => void
-onMessage: (data: {}, rtm: RtmListener) => Promise<any>
-```
-
-Alibotit otetaan käyttöön lisäämällä ylläoleva objekti Kosmosbotin `bots`-taulukkoon:
-```javascript
-const bots = [
-    require("./bots/puraisin")
-];
-```
-
-Kosmosbotti kutsuu jokaisen määritellyn alibotin init-funktiota (jos se on määritelty) kun 
-RTM-yhteys on saatu muodostettua, ja onMessage-funktiota aina kun Slack lähettää viestin.
+Kosmosbotti kutsuu jokaista bot-funktiota jolloin botti voi liittää toiminnallisuutensa Boltin
+`App`-instanssiin.
