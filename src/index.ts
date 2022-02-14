@@ -25,8 +25,8 @@ const cliOpt = { token: config.token }
 
 const app = new App(config)
 
-const joinChannel = (channelId: string) => {
-  console.log('Joining channel', channelId)
+const joinChannel = ([channelId, name]: string[]) => {
+  console.log(`Joining channel #${name}`)
   return app.client.conversations.join({
     ...cliOpt,
     channel: channelId
@@ -37,7 +37,7 @@ bots.forEach(bot => bot(app))
 
 if (autoJoin) {
   app.event('channel_created', async ({ event }) => {
-    await joinChannel(event.channel.id)
+    await joinChannel([event.channel.id, event.channel.name])
   })
 }
 ;(async () => {
@@ -48,14 +48,20 @@ if (autoJoin) {
   if (autoJoin) {
     const channels = await app.client.users
       .conversations(cliOpt)
-      .then(({ channels }) => channels?.map(({ id }) => id ?? '') ?? [])
+      .then(({ channels = [] }) =>
+        channels.map(({ id = '' }) => id).filter(id => !!id)
+      )
 
     const allChannels = await app.client.conversations
       .list(cliOpt)
-      .then(({ channels }) => channels?.map(({ id }) => id ?? '') ?? [])
+      .then(({ channels = [] }) =>
+        channels
+          .map(({ id = '', name = 'noname' }) => [id, name])
+          .filter(([id]) => !!id)
+      )
 
     const joins = allChannels
-      .filter(c => !channels.includes(c))
+      .filter(([id]) => !channels.includes(id))
       .map(joinChannel)
 
     await Promise.allSettled(joins)
