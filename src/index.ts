@@ -56,8 +56,8 @@ if (autoJoin) {
       .list(cliOpt)
       .then(({ channels = [] }) =>
         channels
+          .filter(({ id, is_archived }) => !is_archived && !!id)
           .map(({ id = '', name = 'noname' }) => [id, name])
-          .filter(([id]) => !!id)
       )
 
     const joins = allChannels
