@@ -1,7 +1,10 @@
 import 'dotenv/config'
 import 'log-timestamp'
-import { App, AppOptions } from '@slack/bolt'
+import bolt from '@slack/bolt'
+import type { AppOptions } from '@slack/bolt'
 import bots from './bots'
+
+const { App } = bolt
 
 const {
   SLACK_BOT_TOKEN: token,

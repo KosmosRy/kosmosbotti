@@ -1,7 +1,6 @@
 # Created by .ignore support plugin (hsz.mobi)
 ### Yarn Berry
 .yarn/*
-!.yarn/cache
 !.yarn/patches
 !.yarn/plugins
 !.yarn/releases
@@ -118,3 +117,4 @@ com_crashlytics_export_strings.xml
 crashlytics.properties
 crashlytics-build.properties
 fabric.properties
+/build/
