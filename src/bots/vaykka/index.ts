@@ -1,6 +1,6 @@
-import utteranceGenerator from '../../lib/utterances'
+import utteranceGenerator from '../../lib/utterances.js'
 import type { App, GenericMessageEvent } from '@slack/bolt'
-import { BotRegistration } from '../index'
+import { BotRegistration } from '../index.js'
 import vaykka from './vaykka.json' assert { type: 'json' }
 
 const utterances = utteranceGenerator(vaykka)
